@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Menu — Jeux pédagogiques</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Jeux pédagogiques</h1>
+        <p class="tag">Entraînements : clics & glisser‑déposer — accessible sur le réseau local</p>
+      </div>
+      <nav class="top-nav">
+        <a class="nav-link" href="click.html">Jeu Clics</a>
+        <a class="nav-link" href="dnd.html">Glisser‑Déposer</a>
+        <span class="nav-note">Tableau Prof : accessible depuis l'ordinateur du professeur (<code>/teacher</code>)</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main">
+    <section class="menu-cards">
+      <a class="card" href="click.html">
+        <h2>Types de clics (gauche / droit / double)</h2>
+        <p>Grille 7×7 — effectue le type de clic demandé sur chaque case. Chrono montant, envoi du score.</p>
+        <div class="card-meta">Durée : libre — Public : élèves</div>
+      </a>
+
+      <a class="card" href="dnd.html">
+        <h2>Cliquer‑Glisser‑Déposer (Nombres)</h2>
+        <p>Place les nombres sur les mots correspondants (FR / EN). Chrono montant, envoi du score.</p>
+        <div class="card-meta">10 paires — Public : élèves</div>
+      </a>
+
+      <div class="card muted">
+        <h2>Tableau Prof (protégé)</h2>
+        <p>Accès réservé au professeur. Ouvrir <code>/teacher</code> sur le serveur et s'authentifier.</p>
+        <div class="card-meta">Gestion & export CSV</div>
+      </div>
+    </section>
+
+    <section class="help">
+      <h3>Comment déployer</h3>
+      <ul>
+        <li>Place ces fichiers dans <code>public/</code> (menu et jeux) et <code>private/teacher.html</code> (page prof protégée).</li>
+        <li>Le serveur Node.js (server.js) sert les pages et reçoit les scores via <code>POST /submit</code>.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="small">Serveur local — adresse : <code>http://IP_DU_SERVEUR:3000</code></div>
+      <div class="small">Aide : sauvegarder <code>scores.db</code> régulièrement</div>
+    </div>
+  </footer>
+</body>
+</html>

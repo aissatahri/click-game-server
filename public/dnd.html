@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Glisser‑Déposer — Nombres</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Jeu : cliquer‑glisser‑déposer</h1>
+        <p class="tag">Associe les nombres aux mots (FR / EN)</p>
+      </div>
+
+      <div class="controls controls-compact">
+        <label class="control-inline">Nom
+          <input id="studentName" class="input" type="text" placeholder="Prénom Nom" />
+        </label>
+        <label class="control-inline">Classe
+          <select id="studentClass" class="input">
+            <option value="">-- choisir --</option>
+            <option value="TCSHLF1">TCSHLF1</option>
+            <option value="TCSF1">TCSF1</option>
+            <option value="TCSF2">TCSF2</option>
+            <option value="TCSF3">TCSF3</option>
+            <option value="TCSF4">TCSF4</option>
+          </select>
+        </label>
+        <label class="control-inline small-number">N°
+          <input id="studentNumber" class="input" type="text" placeholder="N" />
+        </label>
+
+        <label class="control-inline">Langue
+          <select id="langSelect" class="input">
+            <option value="fr" selected>Français</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+
+        <div class="btn-group">
+          <button id="restartBtn" class="btn btn-primary">Démarrer</button>
+          <button id="newGridBtn" class="btn">Nouvelle grille</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main">
+    <section class="top-row">
+      <div id="numbersRow" class="numbers-row" aria-label="Nombres à déplacer"></div>
+    </section>
+
+    <section class="bottom-row">
+      <div id="targetsRow" class="targets-row" aria-label="Emplacements de destination"></div>
+    </section>
+
+    <div class="footer-stats">
+      <div>Erreurs : <strong id="errors">0</strong></div>
+      <div>Reste : <strong id="remaining">10</strong></div>
+      <div>Temps : <strong id="time">00:00</strong></div>
+    </div>
+
+    <div id="message" class="message" aria-live="polite"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="small">Retour au menu : <a href="index.html">Accueil</a></div>
+    </div>
+  </footer>
+
+  <script src="dnd-app.js"></script>
+</body>
+</html>

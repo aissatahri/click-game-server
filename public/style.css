@@ -1,0 +1,116 @@
+/* style.css - feuille de style commune pour toutes les pages (menu, jeux, teacher)
+   Remplace public/style.css par ce fichier.
+*/
+
+/* Variables */
+:root{
+  --bg: #f5f8fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #0b5fcc;
+  --danger: #ef4444;
+  --success: #059669;
+  --border: rgba(0,0,0,0.08);
+  --gap: 12px;
+  --container-max: 1200px;
+  --shadow: 0 6px 18px rgba(11,35,64,0.06);
+  --cell-border: rgba(0,0,0,0.35);
+  --radius: 10px;
+}
+
+/* Reset & base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background:var(--bg);
+  color:#07143a;
+  -webkit-font-smoothing:antialiased;
+}
+.container{max-width:var(--container-max);margin:18px auto;padding:0 16px}
+
+/* Header */
+.site-header, .site-header.small-header, .header{
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  border-bottom:1px solid var(--border);
+  padding:16px 0;
+  box-shadow:var(--shadow);
+}
+.header-inner{display:flex;gap:16px;align-items:center;justify-content:space-between}
+.brand h1{margin:0;font-size:20px}
+.brand .tag{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+/* Top nav (index) */
+.top-nav{display:flex;gap:14px;align-items:center}
+.nav-link{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--accent);border:1px solid transparent;font-weight:700}
+.nav-link:hover{background:#f1f5ff;border-color:var(--border)}
+.nav-note{color:var(--muted);font-size:13px}
+
+/* Controls */
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.controls-compact{gap:8px}
+.control-inline{display:flex;flex-direction:column;font-size:13px}
+.control-inline .input{margin-top:6px}
+.input{height:36px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);min-width:120px}
+.small-number .input{width:70px}
+
+/* Buttons */
+.btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-weight:700}
+.btn-primary{background:linear-gradient(180deg,#1e6ef0,#0a58d6);color:#fff;border:none}
+.btn-danger{background:linear-gradient(180deg,#ff6b6b,#ef4444);color:#fff;border:none}
+
+/* Menu cards */
+.menu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding:18px 0}
+.card{display:block;padding:18px;background:var(--card);border-radius:12px;text-decoration:none;color:inherit;border:1px solid var(--border);box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+.card h2{margin:0 0 6px}
+.card .card-meta{margin-top:10px;color:var(--muted);font-size:13px}
+.card.muted{opacity:0.95}
+
+/* Main layout helpers */
+.main{padding:18px 0}
+.help{margin-top:16px;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)}
+
+/* Game: click grid */
+.playground-grid{display:grid;gap:8px;grid-template-columns:repeat(7,1fr);grid-auto-rows:1fr;padding:14px;background:var(--card);border-radius:12px;min-height:420px;border:1px solid var(--border)}
+.cell{display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:800;font-size:16px;color:#fff;background:#4b5563;cursor:pointer;border:3px solid rgba(255,255,255,0.06);padding:8px}
+.cell.empty{background:#f5f5f5;color:transparent;cursor:default}
+
+/* DnD layout */
+.numbers-row{display:flex;gap:12px;padding:14px;background:#fff8d6;border-radius:12px;border:2px solid rgba(0,0,0,0.06)}
+.number{width:72px;height:72px;border-radius:10px;background:#4b5563;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;cursor:grab}
+.targets-row{display:flex;gap:12px;padding:14px;background:#eef0ff;border-radius:12px;border:2px solid rgba(0,0,0,0.06)}
+.target{width:100px;height:72px;border-radius:10px;background:#fff;border:3px dashed rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;padding:6px;text-align:center;color:#111;position:relative}
+.placed-number{position:absolute;left:8px;top:8px;width:56px;height:56px;border-radius:8px;background:#4b5563;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;border:2px solid rgba(255,255,255,0.06)}
+
+/* Footer stats */
+.footer-stats{display:flex;gap:18px;margin-top:12px;font-weight:700}
+
+/* Message */
+.message{margin-top:16px;padding:10px 12px;border-radius:8px;color:#063;display:none}
+.message.show{display:block}
+
+/* Teacher table */
+.teacher-main{padding:16px 0 32px}
+.teacher-table-wrap{background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.table-responsive{overflow:auto;border-radius:8px}
+.scores-table{width:100%;border-collapse:collapse;font-size:14px;min-width:900px}
+.scores-table th,.scores-table td{padding:10px 12px;border-bottom:1px solid rgba(0,0,0,0.06);text-align:left;vertical-align:middle}
+.scores-table thead th{position:sticky;top:0;background:#f6f8fb;z-index:2;font-weight:800}
+.scores-table tr:nth-child(even) td{background:#fbfdff}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);background:var(--card);padding:12px 0}
+.footer-inner{display:flex;gap:12px;align-items:center;justify-content:space-between}
+
+/* Responsive */
+@media(max-width:980px){
+  .controls{gap:8px}
+  .numbers-row,.targets-row{padding:10px}
+  .number{width:56px;height:56px;font-size:18px}
+  .target{width:84px;height:56px}
+  .placed-number{width:48px;height:48px;left:6px;top:6px}
+  .playground-grid{min-height:360px;gap:6px}
+  .scores-table{font-size:13px;min-width:720px}
+}

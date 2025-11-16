@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tableau des scores — Prof (Protégé)</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="site-header small-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Tableau des scores</h1>
+        <p class="tag">Résultats en direct — accès protégé</p>
+      </div>
+
+      <div class="controls controls-small toolbar">
+        <label class="control">
+          <span class="control-label">Classe</span>
+          <select id="filterClass" class="input">
+            <option value="">Toutes</option>
+            <option value="TCSHLF1">TCSHLF1</option>
+            <option value="TCSF1">TCSF1</option>
+            <option value="TCSF2">TCSF2</option>
+            <option value="TCSF3">TCSF3</option>
+            <option value="TCSF4">TCSF4</option>
+          </select>
+        </label>
+
+        <label class="control">
+          <span class="control-label">Jeu</span>
+          <select id="filterGame" class="input">
+            <option value="">Tous</option>
+            <option value="clicks-7x7">Clics 7×7</option>
+            <option value="dnd-numbers">Glisser‑déposer (Nombres)</option>
+          </select>
+        </label>
+
+        <label class="control" style="min-width:200px">
+          <span class="control-label">Recherche</span>
+          <input id="searchName" class="input" type="text" placeholder="Nom, N° ou jeu" />
+        </label>
+
+        <label class="control">
+          <span class="control-label">Trier</span>
+          <select id="orderBy" class="input">
+            <option value="time_seconds">Temps ↑</option>
+            <option value="time_seconds:desc">Temps ↓</option>
+            <option value="errors">Erreurs ↑</option>
+            <option value="errors:desc">Erreurs ↓</option>
+          </select>
+        </label>
+
+        <label class="control small-number">
+          <span class="control-label">Top N</span>
+          <input id="limitInput" class="input" type="number" min="1" max="5000" value="200" />
+        </label>
+
+        <div class="btn-group toolbar-buttons">
+          <button id="refreshBtn" class="btn">Mettre à jour</button>
+          <button id="csvBtn" class="btn btn-primary">Télécharger CSV</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container teacher-main">
+    <section class="teacher-table-wrap">
+      <div class="table-actions" style="display:flex;justify-content:flex-end;margin-bottom:8px;gap:8px">
+        <div style="color:var(--muted);font-size:13px;align-self:center">Total affichés: <span id="countLabel">0</span></div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="scoresTable" class="scores-table">
+          <thead>
+            <tr>
+              <th style="width:56px">#</th>
+              <th>Nom</th>
+              <th style="width:120px">Classe</th>
+              <th style="width:80px">N°</th>
+              <th style="width:160px">Jeu</th>
+              <th style="width:100px">Temps</th>
+              <th style="width:90px">Erreurs</th>
+              <th style="width:160px">Date</th>
+              <th style="width:120px">Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer small-footer">
+    <div class="container footer-inner">
+      <div class="note small">Page protégée — suppression définitive, sauvegardez votre base si nécessaire.</div>
+    </div>
+  </footer>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // teacher page script — uses credentials: 'same-origin' so Basic Auth is sent with fetch
+    const tbody = document.querySelector('#scoresTable tbody');
+    const filterClass = document.getElementById('filterClass');
+    const filterGame = document.getElementById('filterGame');
+    const searchName = document.getElementById('searchName');
+    const orderBy = document.getElementById('orderBy');
+    const limitInput = document.getElementById('limitInput');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const csvBtn = document.getElementById('csvBtn');
+    const countLabel = document.getElementById('countLabel');
+
+    function fmtTimeSec(sec) {
+      const m = Math.floor(sec / 60).toString().padStart(2,'0');
+      const s = (sec % 60).toString().padStart(2,'0');
+      return `${m}:${s}`;
+    }
+
+    function createDeleteButton(id) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-danger';
+      btn.textContent = 'Supprimer';
+      btn.style.padding = '6px 8px';
+      btn.style.fontWeight = '700';
+      btn.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        const ok = confirm('Supprimer cet enregistrement ? Cette action est irréversible.');
+        if (!ok) return;
+        try {
+          const resp = await fetch('/scores/' + id, {
+            method: 'DELETE',
+            credentials: 'same-origin' // important: include Basic Auth credentials
+          });
+          if (resp.status === 401) {
+            alert('Authentification requise ou expirée. Rechargez la page et reconnectez-vous.');
+            return;
+          }
+          const body = await resp.json();
+          if (resp.ok && body.ok) {
+            const tr = tbody.querySelector(`tr[data-id="${id}"]`);
+            if (tr) tr.remove();
+            updateCount();
+          } else {
+            alert('Suppression échouée : ' + (body && body.error ? body.error : resp.statusText));
+          }
+        } catch (err) {
+          console.error('delete error', err);
+          alert('Erreur lors de la suppression');
+        }
+      });
+      return btn;
+    }
+
+    function renderTable(rows) {
+      tbody.innerHTML = '';
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-id', r.id);
+        tr.innerHTML = `
+          <td>${r.id}</td>
+          <td class="mono">${r.name}</td>
+          <td>${r.classe || ''}</td>
+          <td>${r.student_number || ''}</td>
+          <td class="game-type">${r.game_type || ''}</td>
+          <td>${fmtTimeSec(r.time_seconds)}</td>
+          <td>${r.errors}</td>
+          <td>${r.created_at}</td>
+        `;
+        const tdAction = document.createElement('td');
+        tdAction.appendChild(createDeleteButton(r.id));
+        tr.appendChild(tdAction);
+        tbody.appendChild(tr);
+      });
+      updateCount();
+    }
+
+    function updateCount(){
+      countLabel.textContent = tbody.querySelectorAll('tr').length;
+    }
+
+    async function fetchScores() {
+      const cls = filterClass.value;
+      const q = searchName.value.trim();
+      const ob = orderBy.value;
+      const [order, dirMaybe] = ob.includes(':') ? ob.split(':') : [ob, 'asc'];
+      const dir = dirMaybe || 'asc';
+      const limit = Math.max(1, parseInt(limitInput.value, 10) || 200);
+      const params = new URLSearchParams();
+      if (cls) params.set('classe', cls);
+      if (q) params.set('q', q);
+      const game = filterGame.value;
+      if (game) params.set('game_type', game);
+      params.set('order', order);
+      params.set('dir', dir);
+      params.set('limit', limit.toString());
+
+      const url = '/scores?' + params.toString();
+      try {
+        const res = await fetch(url, { credentials: 'same-origin' }); // important: send basic auth
+        if (res.status === 401) {
+          alert('Authentification requise (probablement expirée). Rechargez la page et reconnectez-vous.');
+          return;
+        }
+        const data = await res.json();
+        if (data.ok && data.rows) {
+          renderTable(data.rows);
+        } else {
+          console.warn('fetchScores failed', data);
+        }
+      } catch (err) {
+        console.error('fetchScores error', err);
+      }
+    }
+
+    // socket.io: re-fetch on new score, remove on delete-score
+    const socket = io();
+    socket.on('connect', () => console.log('socket connected'));
+    socket.on('new-score', (row) => {
+      // re-fetch current view so server-side ordering & filters remain consistent
+      fetchScores();
+    });
+    socket.on('delete-score', (data) => {
+      if (!data || !data.id) return;
+      const tr = tbody.querySelector(`tr[data-id="${data.id}"]`);
+      if (tr) tr.remove();
+      updateCount();
+    });
+
+    refreshBtn.addEventListener('click', fetchScores);
+    csvBtn.addEventListener('click', () => {
+      const cls = filterClass.value;
+      const q = searchName.value.trim();
+      const ob = orderBy.value;
+      const [order, dirMaybe] = ob.includes(':') ? ob.split(':') : [ob, 'asc'];
+      const dir = dirMaybe || 'asc';
+      const limit = Math.max(1, parseInt(limitInput.value, 10) || 1000);
+      const params = new URLSearchParams();
+      if (cls) params.set('classe', cls);
+      if (q) params.set('q', q);
+      if (filterGame.value) params.set('game_type', filterGame.value);
+      params.set('order', order);
+      params.set('dir', dir);
+      params.set('limit', limit.toString());
+      // navigate to export.csv — browser will include Basic Auth credentials for same origin
+      window.location = '/export.csv?' + params.toString();
+    });
+
+    // live filters local binding
+    filterClass.addEventListener('change', fetchScores);
+    filterGame.addEventListener('change', fetchScores);
+    orderBy.addEventListener('change', fetchScores);
+    limitInput.addEventListener('change', fetchScores);
+    searchName.addEventListener('input', debounce(fetchScores, 300));
+
+    function debounce(fn, ms){
+      let t;
+      return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), ms); };
+    }
+
+    // initial load
+    fetchScores();
+  </script>
+</body>
+</html>
