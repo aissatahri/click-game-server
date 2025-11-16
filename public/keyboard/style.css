@@ -1,0 +1,71 @@
+:root{
+  --bg:#f7f9fc;
+  --panel:#fff;
+  --accent:#2b7cff;
+  --muted:#666;
+}
+
+*{box-sizing:border-box}
+body{
+  font-family: Inter, system-ui, Arial, sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:#111;
+}
+header{
+  padding:1rem;
+  background:linear-gradient(90deg,#fff,#f3f6ff);
+  border-bottom:1px solid #e6ecff;
+}
+header h1{margin:.2rem 0}
+main{
+  display:flex;
+  gap:1rem;
+  padding:1rem;
+}
+.left{flex:1; min-width:420px}
+.right{width:420px}
+.panel{background:var(--panel); padding:0.75rem; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.04); margin-top:.75rem}
+.hidden{display:none}
+
+/* Keyboard image + overlay */
+.keyboard-wrapper{ position:relative; padding:0.75rem; text-align:center }
+#kb-img{ max-width:100%; height:auto; border-radius:8px; display:block; margin:0 auto; }
+
+/* overlay zone container covers image */
+.overlay{ position:absolute; left:0; top:0; right:0; bottom:0; pointer-events:none; }
+
+/* each .zone is pointer-enabled and positioned absolutely.
+   Les positions sont approximatives et peuvent être ajustées. */
+.overlay .zone{
+  position:absolute;
+  pointer-events:auto;
+  border-radius:6px;
+  opacity:0.55;
+  display:block;
+  cursor:pointer;
+  border:2px solid rgba(0,0,0,0.06);
+}
+
+/* approximated positions (pour une image ~800x300) */
+.zone-fn{ background:#f39c12; top:8%; left:6%; right:6%; height:10%; }
+.zone-alpha{ background:#e74c3c; top:18%; left:6%; width:61%; height:45%; }
+.zone-navi{ background:#3498db; top:32%; left:68%; width:13%; height:30%; }
+.zone-num{ background:#9b59b6; top:18%; left:83%; width:14%; height:45%; }
+
+.hint{ font-size:0.9rem; color:var(--muted); margin-top:8px }
+
+.exercise{margin-top:1rem; padding:0.75rem; background:var(--panel); border-radius:8px}
+.exercise textarea, .exercise input[type="text"], .exercise input[type="search"], #tab-zones input{
+  width:100%; padding:8px; font-size:1rem; margin-top:8px; border:1px solid #dbe7ff; border-radius:6px; background:#fbfdff;
+}
+#tab-zones{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+.status{margin-top:8px; color:var(--muted)}
+button{margin-top:8px; padding:.4rem .6rem; background:var(--accent); color:#fff; border:0; border-radius:6px; cursor:pointer}
+button[aria-disabled="true"], button:disabled{opacity:.5; cursor:not-allowed}
+.q{background:#fff; padding:.6rem; border-radius:8px; margin-bottom:.6rem}
+.q-title{margin:.2rem 0; font-weight:700}
+.q label{display:block; margin:6px 0}
+.actions{display:flex; gap:8px; margin-top:.4rem}
+#qcm-result{margin-top:.6rem; padding:.6rem; border-radius:6px}
+footer{padding:1rem; text-align:center; color:#666; font-size:.9rem}

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simulateur : Utilisation du clavier — Exercices & QCM</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Apprendre à utiliser votre clavier — Exercices et QCM</h1>
+    <p>Simulateur inspiré de la page didactique. Exercez-vous avec des QCM et des activités pratiques.</p>
+  </header>
+
+  <main>
+    <section class="left">
+      <h2>Schéma du clavier — zones cliquables</h2>
+
+      <!-- Keyboard wrapper: image + overlay zones -->
+      <div id="keyboard-illustration" class="panel keyboard-wrapper">
+        <img id="kb-img" src="images/keyboard.png" alt="Schéma du clavier (AZERTY) — zones colorées" />
+        <div class="overlay">
+          <!-- Ces divs sont positionnées par CSS pour se superposer à l'image -->
+          <div class="zone zone-fn" title="Fonctions - cliquez"></div>
+          <div class="zone zone-alpha" title="Clavier alphanumérique - cliquez"></div>
+          <div class="zone zone-navi" title="Touches de mouvement - cliquez"></div>
+          <div class="zone zone-num" title="Pavé numérique - cliquez"></div>
+        </div>
+        <p class="hint">Clique sur une zone colorée de l'image pour voir la question la concernant.</p>
+      </div>
+
+      <div id="zone-question" class="panel hidden"></div>
+
+      <h2>Exercices pratiques</h2>
+
+      <article class="exercise">
+        <h3>1) Flèches gauche / droite</h3>
+        <p>Clique dans la zone ci-dessous devant "Il" (place le curseur au début) puis utilise les flèches <strong>→</strong> et <strong>←</strong> pour atteindre la première lettre <strong>e</strong> du mot <em>texte</em>. L'app te dira quand tu as atteint la bonne position.</p>
+        <textarea id="ex1" rows="3">Il est possible de faire bouger le curseur de texte</textarea>
+        <div class="status" id="ex1-status">Statut : en attente</div>
+        <button data-reset="ex1">Réinitialiser</button>
+      </article>
+
+      <article class="exercise">
+        <h3>2) Touches Retour Arrière / Suppr</h3>
+        <p>Place le curseur juste devant le "I" de "Il n'y a..." et appuie sur Backspace (Retour arrière). Puis place-le à la fin de la ligne et appuie sur Delete (Suppr).</p>
+        <textarea id="ex2" rows="3">Il n y a vraiment rien de très intéressant sur cette ligne.</textarea>
+        <div class="status" id="ex2-status">Statut : en attente</div>
+        <button data-reset="ex2">Réinitialiser</button>
+      </article>
+
+      <article class="exercise">
+        <h3>3) Majuscules</h3>
+        <p>Clique dans la zone ci-dessous et écris ton prénom + nom en mettant la première lettre en majuscule. L'exercice vérifie la casse des premières lettres.</p>
+        <input id="ex3" placeholder="Prénom Nom" />
+        <div class="status" id="ex3-status">Statut : en attente</div>
+        <button data-check="ex3">Vérifier</button>
+        <button data-reset="ex3">Réinitialiser</button>
+      </article>
+
+      <article class="exercise">
+        <h3>4) Tabulation (8 zones)</h3>
+        <p>Clique dans la zone n°1 puis utilise Tab pour parcourir les 8 zones. L'appli enregistrera l'ordre des focus.</p>
+        <div id="tab-zones">
+          <input data-zone="1" placeholder="Zone n°1" />
+          <input data-zone="2" placeholder="Zone n°2" />
+          <input data-zone="3" placeholder="Zone n°3" />
+          <input data-zone="4" placeholder="Zone n°4" />
+          <input data-zone="5" placeholder="Zone n°5" />
+          <input data-zone="6" placeholder="Zone n°6" />
+          <input data-zone="7" placeholder="Zone n°7" />
+          <input data-zone="8" placeholder="Zone n°8" />
+        </div>
+        <div class="status" id="ex4-status">Ordre : —</div>
+        <button id="ex4-reset">Réinitialiser</button>
+      </article>
+    </section>
+
+    <aside class="right">
+      <h2>QCM — Les zones du clavier et fonctions</h2>
+      <form id="qcm-form">
+        <div class="q">
+          <p class="q-title">1) Comment s'appelle la zone du clavier en couleur rouge sur l'illustration?</p>
+          <label><input type="radio" name="q1" value="Le clavier alphanumérique"> Le clavier alphanumérique</label>
+          <label><input type="radio" name="q1" value="Les touches de fonction"> Les touches de fonction</label>
+          <label><input type="radio" name="q1" value="Le pavé numérique"> Le pavé numérique</label>
+          <label><input type="radio" name="q1" value="Les touches de mouvement"> Les touches de mouvement du curseur</label>
+        </div>
+
+        <div class="q">
+          <p class="q-title">2) Comment s'appelle la zone du clavier en couleur bleue sur l'illustration?</p>
+          <label><input type="radio" name="q2" value="Le clavier alphanumérique"> Le clavier alphanumérique</label>
+          <label><input type="radio" name="q2" value="Les touches de fonction"> Les touches de fonction</label>
+          <label><input type="radio" name="q2" value="Le pavé numérique"> Le pavé numérique</label>
+          <label><input type="radio" name="q2" value="Les touches de mouvement"> Les touches de mouvement du curseur</label>
+        </div>
+
+        <div class="q">
+          <p class="q-title">3) Pourquoi dit-on que les claviers FR et BE sont AZERTY ?</p>
+          <label><input type="radio" name="q3" value="concu"> Parce qu'ils ont été conçus par Mr Alfred Zerty</label>
+          <label><input type="radio" name="q3" value="fabrique"> C'est le nom de la fabrique</label>
+          <label><input type="radio" name="q3" value="ordre"> Parce que les premières touches sont A Z E R T Y</label>
+          <label><input type="radio" name="q3" value="polonais"> Ce sont les lettres du polonais</label>
+        </div>
+
+        <div class="q">
+          <p class="q-title">4) Je voudrais ramener le curseur de texte au début de la ligne. Quelle touche utiliser?</p>
+          <label><input type="radio" name="q4" value="Home"> Home</label>
+          <label><input type="radio" name="q4" value="Gauche"> Flèche à gauche</label>
+          <label><input type="radio" name="q4" value="PageUp"> Page Up</label>
+          <label><input type="radio" name="q4" value="NumLock"> Num Lock</label>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="qcm-check">Vérifier le QCM</button>
+          <button type="button" id="qcm-reset">Réinitialiser</button>
+        </div>
+      </form>
+
+      <div id="qcm-result" class="panel hidden"></div>
+
+      <section class="notes">
+        <h3>Notes</h3>
+        <ul>
+          <li>Certaines combinaisons (AltGr, Alt+F4...) dépendent du système et du navigateur.</li>
+          <li>Les exercices pratiques utilisent une textarea/input pour suivre précisément la position du curseur.</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    <p>Développé pour exercice — version simplifiée.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
