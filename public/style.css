@@ -114,3 +114,19 @@ body{
   .playground-grid{min-height:360px;gap:6px}
   .scores-table{font-size:13px;min-width:720px}
 }
+
+/* global styles (revue complète pour cohérence) */
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; font-family: Inter, "Helvetica Neue", Arial, sans-serif; background:#f5f7fb; color:#12263a; }
+.container { max-width:1180px; margin:0 auto; padding:14px; }
+header { background:#fff; border-bottom:1px solid #e6e9ec; padding:14px; }
+main { display:flex; gap:18px; padding:18px; max-width:1180px; margin:0 auto; align-items:flex-start; }
+.left { flex:1 1 720px; }
+.right { width:300px; }
+.panel { background:#fff; border-radius:10px; padding:12px; border:1px solid #eef4fb; margin-bottom:14px; box-shadow:0 6px 18px rgba(12,24,60,0.04); }
+.exercise { padding:12px; border-radius:8px; background:linear-gradient(#fff,#fbfdff); margin-bottom:12px; }
+input, textarea { width:100%; padding:12px 14px; border-radius:10px; border:1px solid #d7e0ea; font-size:16px; }
+textarea { min-height:180px; resize:vertical; line-height:1.45; }
+button { padding:10px 14px; border-radius:8px; background:#2563eb; color:#fff; border:none; cursor:pointer; }
+.status { display:inline-block; margin-top:8px; padding:8px 10px; border-radius:8px; background:#fff; border:1px solid #eef4fb; }
+@media (max-width:980px) { main{flex-direction:column;} .right{width:100%;} }

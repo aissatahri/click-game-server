@@ -1,71 +1,196 @@
-:root{
-  --bg:#f7f9fc;
-  --panel:#fff;
-  --accent:#2b7cff;
-  --muted:#666;
-}
+/* Styles spécifiques au simulateur clavier - ajustés :
+   - textarea ex1/ex2 : hauteur réduite
+   - tab zones : grille 2x4 (4 colonnes, 2 lignes)
+   - ex5/ex6 target : affichage large des caractères (monospace, espacement)
+   - amélioration : alignement des boutons option (QCM) et ajustement des actions/buttons
+*/
 
-*{box-sizing:border-box}
-body{
-  font-family: Inter, system-ui, Arial, sans-serif;
-  margin:0;
-  background:var(--bg);
-  color:#111;
-}
-header{
-  padding:1rem;
-  background:linear-gradient(90deg,#fff,#f3f6ff);
-  border-bottom:1px solid #e6ecff;
-}
-header h1{margin:.2rem 0}
-main{
-  display:flex;
-  gap:1rem;
-  padding:1rem;
-}
-.left{flex:1; min-width:420px}
-.right{width:420px}
-.panel{background:var(--panel); padding:0.75rem; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.04); margin-top:.75rem}
-.hidden{display:none}
+/* Scope général */
+#keyboard-illustration.keyboard-wrapper { position:relative; width:100%; border-radius:8px; overflow:hidden; background:#fff; }
 
-/* Keyboard image + overlay */
-.keyboard-wrapper{ position:relative; padding:0.75rem; text-align:center }
-#kb-img{ max-width:100%; height:auto; border-radius:8px; display:block; margin:0 auto; }
+/* Image */
+#keyboard-illustration #kb-img { width:100%; height:auto; display:block; user-select:none; -webkit-user-drag:none; }
 
-/* overlay zone container covers image */
-.overlay{ position:absolute; left:0; top:0; right:0; bottom:0; pointer-events:none; }
-
-/* each .zone is pointer-enabled and positioned absolutely.
-   Les positions sont approximatives et peuvent être ajustées. */
-.overlay .zone{
+/* Overlay contenant les zones (responsive via % appliqués par overlay.js) */
+#keyboard-illustration .overlay {
   position:absolute;
-  pointer-events:auto;
-  border-radius:6px;
-  opacity:0.55;
-  display:block;
-  cursor:pointer;
-  border:2px solid rgba(0,0,0,0.06);
+  left:0; top:0; width:100%; height:100%;
+  pointer-events:none; z-index:2;
 }
 
-/* approximated positions (pour une image ~800x300) */
-.zone-fn{ background:#f39c12; top:8%; left:6%; right:6%; height:10%; }
-.zone-alpha{ background:#e74c3c; top:18%; left:6%; width:61%; height:45%; }
-.zone-navi{ background:#3498db; top:32%; left:68%; width:13%; height:30%; }
-.zone-num{ background:#9b59b6; top:18%; left:83%; width:14%; height:45%; }
-
-.hint{ font-size:0.9rem; color:var(--muted); margin-top:8px }
-
-.exercise{margin-top:1rem; padding:0.75rem; background:var(--panel); border-radius:8px}
-.exercise textarea, .exercise input[type="text"], .exercise input[type="search"], #tab-zones input{
-  width:100%; padding:8px; font-size:1rem; margin-top:8px; border:1px solid #dbe7ff; border-radius:6px; background:#fbfdff;
+/* Zone: styles spécifiques et forte priorité */
+#keyboard-illustration .overlay .zone {
+  position:absolute !important;
+  border-radius:6px !important;
+  box-sizing:border-box !important;
+  pointer-events:auto !important;
+  transition: transform .12s, box-shadow .12s, opacity .12s;
+  background: rgba(255,0,0,0.10) !important;
+  border: 2px solid rgba(255,255,255,0.85) !important;
 }
-#tab-zones{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
-.status{margin-top:8px; color:var(--muted)}
-button{margin-top:8px; padding:.4rem .6rem; background:var(--accent); color:#fff; border:0; border-radius:6px; cursor:pointer}
-button[aria-disabled="true"], button:disabled{opacity:.5; cursor:not-allowed}
-.q{background:#fff; padding:.6rem; border-radius:8px; margin-bottom:.6rem}
-.q-title{margin:.2rem 0; font-weight:700}
-.q label{display:block; margin:6px 0}
-.actions{display:flex; gap:8px; margin-top:.4rem}
-#qcm-result{margin-top:.6rem; padding:.6rem; border-radius:6px}
-footer{padding:1rem; text-align:center; color:#666; font-size:.9rem}
+
+/* Couleurs distinctes */
+#keyboard-illustration .overlay .zone.zone-fn    { background: rgba(255,165,0,0.20) !important; border-color: rgba(255,165,0,0.95) !important; }
+#keyboard-illustration .overlay .zone.zone-alpha { background: rgba(220,0,0,0.14) !important; border-color: rgba(220,0,0,0.95) !important; }
+#keyboard-illustration .overlay .zone.zone-navi  { background: rgba(0,90,255,0.10) !important; border-color: rgba(0,90,255,0.95) !important; }
+#keyboard-illustration .overlay .zone.zone-num   { background: rgba(120,0,120,0.10) !important; border-color: rgba(120,0,120,0.95) !important; }
+
+/* Hover */
+#keyboard-illustration .overlay .zone:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(12,24,60,0.12); cursor:pointer; }
+
+/* -------------------------
+   Ajustements demandés
+   ------------------------- */
+
+/* 1) Réduire la hauteur des textarea ex1 et ex2 (minimiser la hauteur) */
+#ex1, #ex2 {
+  min-height:90px !important;   /* hauteur réduite pour ces exercices */
+  max-height:220px;
+  padding:10px !important;
+  font-size:15px !important;
+  line-height:1.4;
+  resize:vertical;               /* l'utilisateur peut agrandir si besoin */
+}
+
+/* 2) Tabulation : disposition en grille 2 lignes × 4 colonnes */
+#tab-zones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
+  grid-auto-rows: minmax(44px, auto);
+  gap: 10px;
+  align-items: center;
+}
+/* rendre les inputs visibles, pleine largeur des cellules */
+#tab-zones input {
+  width: 100% !important;
+  padding: 10px 12px !important;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #d7e0ea;
+  box-sizing: border-box;
+}
+
+/* mobile : passer à 2 colonnes pour lisibilité */
+@media (max-width: 640px) {
+  #tab-zones {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 3) Agrandir / élargir l'affichage des caractères pour Shift (ex5) et AltGr (ex6) */
+#ex5-target, #ex6-target {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: #f7fbff;
+  border: 1px dashed #dbeeff;
+  font-family: "Courier New", Courier, monospace; /* monospace pour alignement des caractères */
+  font-size: 18px;         /* plus grand */
+  letter-spacing: 8px;     /* espacement large entre caractères */
+  white-space: pre-wrap;   /* conserve les espaces et passages à la ligne */
+  overflow-x: auto;        /* si trop long, permettre défilement horizontal */
+  box-sizing: border-box;
+}
+
+/* S'assurer que l'input suivant la cible est clairement séparé */
+#ex5, #ex6 {
+  margin-bottom: 6px;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+
+/* Maintenir l'éditeur overlay visible au dessus */
+#overlay-editor { position:relative; z-index:20 !important; pointer-events:auto; }
+
+/* Petite amélioration visuelle pour que les zones de tabulation restent distinctes */
+#tab-zones input:focus {
+  outline: none;
+  border-color: #7aa7ff;
+  box-shadow: 0 6px 18px rgba(122,167,255,0.12);
+}
+
+/* Empêcher que d'autres règles globales n'annulent l'affichage */
+#keyboard-illustration, #keyboard-illustration * { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* -------------------------
+   ALIGNEMENT DES BOUTONS OPTION (QCM)
+   ------------------------- */
+
+/* Faire des labels QCM des conteneurs flex pour aligner l'input et le texte verticalement */
+#qcm-form .q label {
+  display: flex;
+  align-items: center;    /* centre verticalement le radio et le texte */
+  gap: 10px;              /* espace entre le bouton et le texte */
+  padding: 6px 0;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+/* Forcer l'input radio/checkbox à ne pas décaler (taille constante) */
+#qcm-form .q label input[type="radio"],
+#qcm-form .q label input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+/* S'assurer que le texte du label occupe le reste et se wrap proprement */
+#qcm-form .q label > span,
+#qcm-form .q label > strong {
+  flex: 1 1 auto;
+  min-width: 0; /* allow text wrapping inside flex item */
+}
+
+/* Si le label contient uniquement un text node (pas d'élément span), forcer l'affichage inline-block */
+#qcm-form .q label { white-space: normal; }
+
+/* Amélioration pour titres/questions */
+#qcm-form .q .q-title {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Amélioration responsive: sur très petits écrans réduire l'espacement */
+@media (max-width: 420px) {
+  #qcm-form .q label { gap: 8px; font-size: 15px; }
+  #qcm-form .q label input[type="radio"] { width:16px; height:16px; }
+}
+
+/* -------------------------
+   ACTIONS / BOUTONS (alignement)
+   ------------------------- */
+
+/* rendre le groupe d'actions flexible et adaptatif */
+#qcm-form .actions,
+.section-actions, .exercise .actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap; /* permet aux boutons de passer à la ligne si l'espace manque */
+}
+
+/* Buttons secondaires homogènes */
+#qcm-form .actions button,
+.exercise .actions button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Forcer les boutons d'option à ne pas étirer tout le conteneur */
+#qcm-form .q { display:block; }
+
+/* Si tu utilises des labels sans span, voici une règle utile pour que le texte ne pousse pas le radio : */
+#qcm-form .q label input[type="radio"] + * { overflow-wrap: break-word; }
+
+/* Petit ajustement visuel pour focus */
+#qcm-form .q label input[type="radio"]:focus {
+  outline: 2px solid rgba(122,167,255,0.28);
+  outline-offset: 2px;
+}
+
+/* Fin du fichier */
