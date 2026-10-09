@@ -237,7 +237,7 @@ const crypto = require('crypto');
   });
 
   server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Teacher user: ${TEACHER_USER} (password from TEACHER_PASS env or default 'adminpass')`);
   });
 })();

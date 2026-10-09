@@ -120,9 +120,33 @@ body{
 html,body { margin:0; padding:0; font-family: Inter, "Helvetica Neue", Arial, sans-serif; background:#f5f7fb; color:#12263a; }
 .container { max-width:1180px; margin:0 auto; padding:14px; }
 header { background:#fff; border-bottom:1px solid #e6e9ec; padding:14px; }
-main { display:flex; gap:18px; padding:18px; max-width:1180px; margin:0 auto; align-items:flex-start; }
-.left { flex:1 1 720px; }
-.right { width:300px; }
+main { display:flex; flex-direction:column; gap:18px; padding:18px; max-width:1180px; margin:0 auto; align-items:stretch; min-width:0; }
+main.container { padding:18px 16px; }
+main > * { min-width:0; max-width:100%; }
+.left { flex:1 1 0; min-width:0; }
+.right { width:300px; max-width:100%; }
+@media (min-width:981px) { main:has(> .right) { flex-direction:row; align-items:flex-start; } }
+img, video, canvas, svg { max-width:100%; height:auto; }
+html, body { overflow-x:hidden; }
+.header-inner { flex-wrap:wrap; }
+.controls > * { min-width:0; }
+.btn-group { display:flex; gap:8px; flex-wrap:wrap; }
+.numbers-row, .targets-row { flex-wrap:wrap; justify-content:center; }
+@media (max-width:640px) {
+  .header-inner { flex-direction:column; align-items:stretch; }
+  .controls { flex-direction:column; align-items:stretch; }
+  .control-inline, .control-inline .input, .btn-group .btn { width:100%; }
+  .small-number .input { width:100%; }
+  .btn-group { flex-direction:column; }
+  .playground-grid { grid-template-columns:repeat(4,1fr); min-height:0; padding:8px; }
+  .cell { font-size:14px; padding:4px; min-height:48px; }
+  .number { width:48px; height:48px; font-size:16px; }
+  .target { width:72px; height:52px; font-size:13px; }
+  .placed-number { width:40px; height:40px; font-size:15px; }
+  .footer-stats { flex-wrap:wrap; gap:10px; }
+  .footer-inner, .top-nav { flex-wrap:wrap; }
+  .container { padding-left:10px; padding-right:10px; }
+}
 .panel { background:#fff; border-radius:10px; padding:12px; border:1px solid #eef4fb; margin-bottom:14px; box-shadow:0 6px 18px rgba(12,24,60,0.04); }
 .exercise { padding:12px; border-radius:8px; background:linear-gradient(#fff,#fbfdff); margin-bottom:12px; }
 input, textarea { width:100%; padding:12px 14px; border-radius:10px; border:1px solid #d7e0ea; font-size:16px; }
